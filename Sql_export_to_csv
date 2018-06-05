@@ -1,0 +1,8 @@
+select id, business_id, user_id, stars,text 
+from review 
+limit 10000
+into outfile '/var/lib/mysql-files/reviews.csv'
+fields enclosed by '"' 
+terminated by ";"
+excaped by '"'
+lines terminated by '\r\n';
