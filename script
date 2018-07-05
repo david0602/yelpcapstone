@@ -1,17 +1,34 @@
 import nltk
+from nltk.corpus import stopwords
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import string
 
 yelp=pd.read_csv('reviews.csv',sep=';',names=('id','business_id','user_id','stars','review'))
 
 yelp.info()
 yelp.describe()
 
-yelp[['review']]=yelp[['length']].astype(str)
+yelp[['review']]=yelp[['review']].astype(str)
 yelp['review length']=yelp['review'].apply(len)
 
 g = sns.FacetGrid(data=yelp, col='stars')
 g.map(plt.hist, 'review length', bins=50, color='#000000')
 plt.savefig('stars_reviewlength', dpi=400)
+
+yelp_1=yelp[yelp['stars']==1]
+yelp_2=yelp[yelp['stars']==2]
+yelp_3=yelp[yelp['stars']==3]
+yelp_4=yelp[yelp['stars']==4]
+yelp_5=yelp[yelp['stars']==5]
+
+yelp_review = yelp['review']
+yelp_stars= yelp['stars']
+
+def stopremove(text):
+  nopunc = [char for char in text if char not in string.punctuation]
+  nopunc = ''.join(nopunc)
+  return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]
+
