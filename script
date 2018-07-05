@@ -18,17 +18,28 @@ g = sns.FacetGrid(data=yelp, col='stars')
 g.map(plt.hist, 'review length', bins=50, color='#000000')
 plt.savefig('stars_reviewlength', dpi=400)
 
-yelp_1=yelp[yelp['stars']==1]
-yelp_2=yelp[yelp['stars']==2]
-yelp_3=yelp[yelp['stars']==3]
-yelp_4=yelp[yelp['stars']==4]
-yelp_5=yelp[yelp['stars']==5]
-
-yelp_review = yelp['review']
-yelp_stars= yelp['stars']
+yelp_new= yelp[(yelp['stars'] == 1) | (yelp['stars'] == 2)|(yelp['stars'] == 3)|(yelp['stars'] == 4)|(yelp['stars'] == 5)]
+yelp_review = yelp_new['review'].str.lower()
+yelp_stars = yelp_new['stars']
 
 def stopremove(text):
   nopunc = [char for char in text if char not in string.punctuation]
   nopunc = ''.join(nopunc)
   return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]
+  stopremove(yelp_review)
 
+from sklearn.feature_extration.text import CountVectorizer
+bowtransform =CountVectorizer(analyzer=stopremove).fit(yelp_review)
+print(len(bowtransform.vocabulary_))
+yelp_review=bowtransform.transform(yelp_review)
+
+from sklearn.model_selection import train_test_split
+review_train,review_test, stars_train,stars_test =train_test_split(yelp_review, yelp_stars,test_size=0.3,random_state=10)
+
+from sklearn.naive_bayes import MultinomialNB
+nb = MultinomialNB()
+nb.fit(review_train, stars_train)
+
+prediction = nb.predict(review_test)
+
+from sklearn.metrics import confusion_matrix, classification_report
