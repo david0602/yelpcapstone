@@ -28,7 +28,7 @@ def stopremove(text):
   return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-tfidftransform= TfidfVectorizer(analyzer=stopremove).fit(yelp_review)]
+tfidftransform= TfidfVectorizer(analyzer=stopremove).fit(yelp_review)
 print(len(tfidftrasnform.vocabulary_))
 yelp_review=tfidftransform.transform.transform(yelp_review)
 
