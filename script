@@ -27,8 +27,6 @@ def stopremove(text):
   nopunc = ''.join(nopunc)
   return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]
 
-stopremove(yelp_review)
-
 from sklearn.feature_extraction.text import CountVectorizer
 bowtransform =CountVectorizer(analyzer=stopremove).fit(yelp_review)
 print(len(bowtransform.vocabulary_))
