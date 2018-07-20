@@ -42,3 +42,6 @@ nb.fit(review_train, stars_train)
 prediction = nb.predict(review_test)
 
 from sklearn.metrics import confusion_matrix, classification_report
+print(confusion_matrix(stars_test, prediction))
+print(classification_report(stars_test, prediction))
+
