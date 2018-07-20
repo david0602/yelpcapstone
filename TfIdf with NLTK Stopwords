@@ -29,8 +29,8 @@ def stopremove(text):
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 tfidftransform= TfidfVectorizer(analyzer=stopremove).fit(yelp_review)
-print(len(tfidftrasnform.vocabulary_))
-yelp_review=tfidftransform.transform.transform(yelp_review)
+print(len(tfidftransform.vocabulary_))
+yelp_review=tfidftransform.transform(yelp_review)
 
 from sklearn.model_selection import train_test_split
 review_train,review_test, stars_train,stars_test =train_test_split(yelp_review, yelp_stars,test_size=0.3,random_state=10)
