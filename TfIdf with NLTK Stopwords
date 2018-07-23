@@ -30,10 +30,10 @@ def stopremove(text):
 from sklearn.feature_extraction.text import TfidfVectorizer
 tfidftransform= TfidfVectorizer(analyzer=stopremove).fit(yelp_review)
 print(len(tfidftransform.vocabulary_))
-yelp_review=tfidftransform.transform(yelp_review)
+yelp_review2=tfidftransform.transform(yelp_review)
 
 from sklearn.model_selection import train_test_split
-review_train,review_test, stars_train,stars_test =train_test_split(yelp_review, yelp_stars,test_size=0.3,random_state=10)
+review_train,review_test, stars_train,stars_test =train_test_split(yelp_review2, yelp_stars,test_size=0.3,random_state=10)
 
 from sklearn.naive_bayes import MultinomialNB
 nb = MultinomialNB()
