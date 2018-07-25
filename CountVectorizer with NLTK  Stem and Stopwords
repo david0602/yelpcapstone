@@ -1,0 +1,47 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.snowball import SnowballStemmer
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import string
+
+yelp=pd.read_csv('reviews.csv',sep=';',names=('id','business_id','user_id','stars','review'))
+
+yelp.info()
+yelp.describe()
+
+yelp[['review']]=yelp[['review']].astype(str)
+yelp['review length']=yelp['review'].apply(len)
+
+g = sns.FacetGrid(data=yelp, col='stars')
+g.map(plt.hist, 'review length', bins=50, color='#000000')
+plt.savefig('stars_reviewlength', dpi=400)
+
+yelp_new= yelp[(yelp['stars'] == 1) | (yelp['stars'] == 2)|(yelp['stars'] == 3)|(yelp['stars'] == 4)|(yelp['stars'] == 5)]
+yelp_review = yelp_new['review'].str.lower()
+yelp_stars = yelp_new['stars']
+
+
+stemmer=SnowballStemmer("english", ignore_stopwords=True)
+from sklearn.feature_extraction.text import CountVectorizer
+analyzer= CountVectorizer().build_analyzer()
+def stemmed_words(doc):
+    return (stemmer.stem(w) for w in analyzer(doc))
+
+stem_vectorizer = CountVectorizer(analyzer=stemmed_words)
+yelp_review=stem_vectorizer.fit_transform(yelp_review)
+
+from sklearn.model_selection import train_test_split
+review_train,review_test, stars_train,stars_test =train_test_split(yelp_review, yelp_stars,test_size=0.3,random_state=10)
+
+from sklearn.naive_bayes import MultinomialNB
+nb = MultinomialNB(fit_prior=False)
+nb.fit(review_train, stars_train)
+
+prediction = nb.predict(review_test)
+
+from sklearn.metrics import confusion_matrix, classification_report
+print(confusion_matrix(stars_test, prediction))
+print(classification_report(stars_test, prediction))
