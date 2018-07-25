@@ -1,0 +1,16 @@
+#Naive Bayes
+
+from sklearn.naive_bayes import MultinomialNB
+nb = MultinomialNB()
+nb.fit(review_train, stars_train)
+
+prediction = nb.predict(review_test)
+
+
+#SVM
+
+from sklearn.linear_model import SGDClassifier
+svm=SGDClassifier()
+svm.fit(review_train, stars_train)
+
+prediction= svm.predict(review_test)
