@@ -1,0 +1,15 @@
+x= [1,2,3,4,5]
+y= yelp.groupby('stars').size()
+
+fig, ax = plt.subplots()
+width = 0.75
+ind = np.arange(len(y))  
+ax.barh(ind, y, width, color="blue")
+ax.set_yticks(ind+width/2)
+ax.set_yticklabels(x)
+for i, v in enumerate(y):
+    ax.text(v + 3, i + .25, str(v), color='blue')
+plt.title('Ratings Distribution')
+plt.xlabel('Rating')
+plt.ylabel('Rating Count')
+plt.show()
